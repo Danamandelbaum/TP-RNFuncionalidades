@@ -4,32 +4,70 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
-import PantallaInicio from '././Components/Inicio/PantallaInicio.js';
-import PantallaBuscar from '././Components/Buscar/PantallaBuscar.js';
-import PantallaBuscarDetalle from '././Components/Buscar/BuscarDetalle.js';
-import PantallaNotificaciones from '././Components/Notificaciones/PantallaNotificaciones.js';
-import PantallaClima from './Components/Clima/PantallaClima.js'; // Cambiado a PantallaClima
+import PantallaInicio from './Components/Inicio/PantallaInicio';
+import PantallaNotificaciones from './Components/Notificaciones/PantallaNotificaciones';
+import PantallaClima from './Components/Clima/PantallaClima';
+import PantallaNotificacionesDetalle from './Components/Notificaciones/PantallaNotificacionesDetalle';
+import GeneradorQR from './Components/About/GeneradorQR';
 
-import PantallaNotificacionesDetalle from '././Components/Notificaciones/PantallaNotificacionesDetalle.js';
+const NotificacionesStack = createStackNavigator();
+const InicioStack = createStackNavigator();
+const ClimaStack = createStackNavigator();
+const AboutStack = createStackNavigator();
 
-const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator();
-
-const StackNavigator = (initialScreen, detailScreen) => (
-  <Stack.Navigator>
-    <Stack.Screen 
-      name={initialScreen.name} 
-      component={initialScreen.component} 
-      options={{ headerShown: false }} 
-    />
-    {detailScreen && (
-      <Stack.Screen 
-        name={detailScreen.name} 
-        component={detailScreen.component} 
+function NotificacionesStackScreen() {
+  return (
+    <NotificacionesStack.Navigator>
+      <NotificacionesStack.Screen 
+        name="Notificaciones" 
+        component={PantallaNotificaciones} 
+        options={{ headerShown: false }} 
       />
-    )}
-  </Stack.Navigator>
-);
+      <NotificacionesStack.Screen 
+        name="PantallaNotificacionesDetalle" 
+        component={PantallaNotificacionesDetalle} 
+      />
+    </NotificacionesStack.Navigator>
+  );
+}
+
+function InicioStackScreen() {
+  return (
+    <InicioStack.Navigator>
+      <InicioStack.Screen 
+        name="Inicio" 
+        component={PantallaInicio} 
+        options={{ headerShown: false }} 
+      />
+    </InicioStack.Navigator>
+  );
+}
+
+function ClimaStackScreen() {
+  return (
+    <ClimaStack.Navigator>
+      <ClimaStack.Screen 
+        name="Clima" 
+        component={PantallaClima} 
+        options={{ headerShown: false }} 
+      />
+    </ClimaStack.Navigator>
+  );
+}
+
+function AboutStackScreen() {
+  return (
+    <AboutStack.Navigator>
+      <AboutStack.Screen 
+        name="Acerca de" 
+        component={GeneradorQR} 
+        options={{ headerShown: false }} 
+      />
+    </AboutStack.Navigator>
+  );
+}
+
+const Tab = createBottomTabNavigator();
 
 function MyTabs() {
   return (
@@ -38,43 +76,24 @@ function MyTabs() {
         tabBarIcon: ({ color, size }) => {
           let iconName;
 
-          switch (route.name) {
-            case 'Notificaciones':
-              iconName = 'notifications-outline';
-              break;
-            case 'Inicio':
-              iconName = 'home-outline';
-              break;
-            case 'Buscar':
-              iconName = 'search-outline';
-              break;
-            case 'Clima': // Cambiado a Clima
-              iconName = 'thermometer-outline'; // Icono cambiado para clima
-              break;
-            default:
-              iconName = 'home-outline';
+          if (route.name === 'Notificaciones') {
+            iconName = 'notifications-outline';
+          } else if (route.name === 'Inicio') {
+            iconName = 'home-outline';
+          } else if (route.name === 'Clima') {
+            iconName = 'thermometer-outline';
+          } else if (route.name === 'Acerca de' || route.name === 'Generador QR') {
+            iconName = 'information-circle-outline';
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
       })}
     >
-      <Tab.Screen 
-        name="Notificaciones" 
-        component={() => StackNavigator({ name: 'Notificaciones', component: PantallaNotificaciones }, { name: 'PantallaNotificacionesDetalle', component: PantallaNotificacionesDetalle })} 
-      />
-      <Tab.Screen 
-        name="Inicio" 
-        component={() => StackNavigator({ name: 'Inicio', component: PantallaInicio }, { name: 'PantallaInicio', component: PantallaInicio })} 
-      />
-      <Tab.Screen 
-        name="Buscar" 
-        component={() => StackNavigator({ name: 'Buscar', component: PantallaBuscar }, { name: 'DetalleBuscar', component: PantallaBuscarDetalle })} 
-      />
-      <Tab.Screen 
-        name="Clima" // Nombre de la pestaña cambiado a Clima
-        component={() => StackNavigator({ name: 'Clima', component: PantallaClima })} // Eliminado PantallaPerfilDetalle
-      />
+      <Tab.Screen name="Notificaciones" component={NotificacionesStackScreen} />
+      <Tab.Screen name="Inicio" component={InicioStackScreen} />
+      <Tab.Screen name="Clima" component={ClimaStackScreen} />
+      <Tab.Screen name="Acerca de" component={AboutStackScreen} />
     </Tab.Navigator>
   );
 }

@@ -1,45 +1,44 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 
-// Dimensiones de la pantalla
+
 const { width, height } = Dimensions.get('window');
 
 export default function PantallaInicio() {
-  // Datos para el carrusel
   const slides = [
     {
       id: 1,
-      image: ('../Imagen/Ida.jpg'),  // Cambiar a require para imágenes locales
+      image: ('../Imagen/Ida.jpg'),  
       title: 'Pasaje de ida',
     },
     {
       id: 2,
-      image: ('../Imagen/Vuelta.jpg'),  // Cambiar a require para imágenes locales
+      image: ('../Imagen/Vuelta.jpg'),  
       title: 'Pasaje de vuelta',
     }
   ];
 
-  // Estado para el índice del slide actual
+ 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Referencia al ScrollView
+ 
   const scrollViewRef = useRef(null);
 
-  // Función para ir al siguiente slide
+
   const handleNext = () => {
     const nextIndex = (currentIndex + 1) % slides.length;
     setCurrentIndex(nextIndex);
     scrollViewRef.current.scrollTo({ x: nextIndex * width, animated: true });
   };
 
-  // Función para ir al slide anterior
+  
   const handlePrev = () => {
     const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
     setCurrentIndex(prevIndex);
     scrollViewRef.current.scrollTo({ x: prevIndex * width, animated: true });
   };
 
-  // Controlar el scroll para actualizar el índice actual
+
   const handleScroll = (event) => {
     const scrollPosition = event.nativeEvent.contentOffset.x;
     const index = Math.round(scrollPosition / width);
@@ -52,7 +51,7 @@ export default function PantallaInicio() {
         horizontal
         pagingEnabled
         ref={scrollViewRef}
-        onScroll={handleScroll} // Controlar el deslizamiento
+        onScroll={handleScroll}
         scrollEventThrottle={16}
         showsHorizontalScrollIndicator={false}
         style={styles.scrollView}
@@ -88,16 +87,16 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
-    width: width,  // Asegurar que el ScrollView tenga el mismo ancho que la pantalla
+    width: width,  
   },
   slide: {
     justifyContent: 'center',
     alignItems: 'center',
   },
   image: {
-    width: width * 0.9, // Ajustar el tamaño de la imagen para que se vea completa
-    height: height * 0.5, // Ajustar a la mitad de la altura de la pantalla
-    resizeMode: 'contain', // Usar contain para que no se corte la imagen
+    width: width * 0.9, 
+    height: height * 0.5, 
+    resizeMode: 'contain',
   },
   title: {
     marginTop: 10,

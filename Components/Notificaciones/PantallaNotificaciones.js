@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, FlatList, TouchableOpacity, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, FlatList, TouchableOpacity, StyleSheet, Alert, Vibration } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
-export default function ContactosApp() {
+const mostrarError = (titulo, mensaje) => {
+  Vibration.vibrate(500);
+  Alert.alert(
+    titulo,
+    mensaje,
+    [{ text: 'OK' }]
+  );
+};
+
+export default function PantallaNotificaciones() {
   const [contactos, setContactos] = useState([]);
   const [nuevoContacto, setNuevoContacto] = useState({
     nombre: '',
@@ -22,6 +31,7 @@ export default function ContactosApp() {
           setContactos(JSON.parse(contactosGuardados));
         }
       } catch (error) {
+        mostrarError('Error', 'Error cargando contactos');
         console.log("Error cargando contactos", error);
       }
     };
@@ -32,6 +42,7 @@ export default function ContactosApp() {
     try {
       await AsyncStorage.setItem('contactos', JSON.stringify(contactosActualizados));
     } catch (error) {
+      mostrarError('Error', 'Error guardando contactos');
       console.log("Error guardando contactos", error);
     }
   };
@@ -47,12 +58,12 @@ export default function ContactosApp() {
       !nuevoContacto.apellido.trim() ||
       !nuevoContacto.telefono.trim()
     ) {
-      Alert.alert('Error', 'Todos los campos son obligatorios');
+      mostrarError('Error', 'Todos los campos son obligatorios');
       return;
     }
 
     if (!validarTelefono(nuevoContacto.telefono)) {
-      Alert.alert('Error', 'Número de teléfono inválido. Debe contener entre 7 y 15 dígitos.');
+      mostrarError('Error', 'Número de teléfono inválido. Debe contener entre 7 y 15 dígitos, solo números.');
       return;
     }
 

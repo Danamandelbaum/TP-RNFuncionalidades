@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 export default function PantallaPerfilDetalle  ({ route })  {
-  // Obtener los parámetros enviados desde PantallaPerfil
   const { nombre, telefono } = route.params;
 
   return (
@@ -19,7 +18,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#99ccff', // Color de fondo para Pantalla de Detalles de Perfil
+    backgroundColor: '#99ccff',
   },
   title: {
     fontSize: 24,

@@ -3,10 +3,9 @@ import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 export default function PantallaNotificacionesDetalle({ route }) {
-  const { contactos } = route.params; // Recibimos los contactos desde la pantalla anterior
+  const { contactos } = route.params; 
   const navigation = useNavigation();
 
-  // Filtrar solo los contactos de emergencia
   const contactosEmergencia = contactos.filter(contacto => contacto.emergencia);
 
   return (

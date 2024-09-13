@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import * as Location from 'expo-location';
 import axios from 'axios';
+import { mostrarError } from '../Error/ErrorHelper.js'; 
 
 export default function PantallaClima() {
   const [location, setLocation] = useState(null);
@@ -15,15 +16,18 @@ export default function PantallaClima() {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('Permiso para acceder a la ubicación denegado.');
+        mostrarError('Error de Permiso', 'Permiso para acceder a la ubicación denegado.');
         setLoading(false);
         return;
       }
 
-      let loc = await Location.getCurrentPositionAsync({});
-      setLocation(loc.coords);
-
-      if (loc) {
+      try {
+        let loc = await Location.getCurrentPositionAsync({});
+        setLocation(loc.coords);
         obtenerClima(loc.coords.latitude, loc.coords.longitude);
+      } catch (error) {
+        mostrarError('Error', 'No se pudo obtener la ubicación.');
+        setLoading(false);
       }
     };
 
@@ -40,13 +44,12 @@ export default function PantallaClima() {
         const { temperature } = response.data.current_weather;
         setTemperature(temperature);
       } catch (error) {
-        console.error('Error obteniendo el clima:', error);
+        mostrarError('Error', 'Error obteniendo el clima.');
       } finally {
         setLoading(false);
       }
     };
 
-    // Actualiza la hora cada segundo
     const interval = setInterval(() => {
       setDateTime(new Date());
     }, 1000);
@@ -73,7 +76,6 @@ export default function PantallaClima() {
           <Text style={styles.text}>
             Temperatura actual: {temperature !== null ? `${temperature}°C` : 'Cargando...'}
           </Text>
-  
         </>
       ) : (
         <Text style={styles.errorText}>{errorMsg || 'Obteniendo ubicación...'}</Text>
