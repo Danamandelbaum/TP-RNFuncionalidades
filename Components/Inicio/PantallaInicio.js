@@ -1,20 +1,20 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, Animated } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 
 // Dimensiones de la pantalla
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 export default function PantallaInicio() {
   // Datos para el carrusel
   const slides = [
     {
       id: 1,
-      image: '../Imagen/Ida.jpg',  // Cambiar a require para imágenes locales
+      image: ('../Imagen/Ida.jpg'),  // Cambiar a require para imágenes locales
       title: 'Pasaje de ida',
     },
     {
       id: 2,
-      image: '../Imagen/Vuelta.jpg',  // Cambiar a require para imágenes locales
+      image: ('../Imagen/Vuelta.jpg'),  // Cambiar a require para imágenes locales
       title: 'Pasaje de vuelta',
     }
   ];
@@ -22,47 +22,51 @@ export default function PantallaInicio() {
   // Estado para el índice del slide actual
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Variable de animación para el deslizamiento
-  const slideAnim = useRef(new Animated.Value(0)).current;
+  // Referencia al ScrollView
+  const scrollViewRef = useRef(null);
 
-  // Función para manejar la transición y el cambio de imagen
-  const changeSlide = (nextIndex) => {
-    const direction = nextIndex > currentIndex ? 1 : -1;
-
-    // Animar la traslación fuera de la pantalla
-    Animated.timing(slideAnim, {
-      toValue: direction * -width,
-      duration: 500,
-      useNativeDriver: true,
-    }).start(() => {
-      setCurrentIndex(nextIndex);
-
-      // Reiniciar la posición del slide y deslizamiento hacia la nueva imagen
-      slideAnim.setValue(direction * width);
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 1000,
-        useNativeDriver: true,
-      }).start();
-    });
-  };
-
+  // Función para ir al siguiente slide
   const handleNext = () => {
     const nextIndex = (currentIndex + 1) % slides.length;
-    changeSlide(nextIndex);
+    setCurrentIndex(nextIndex);
+    scrollViewRef.current.scrollTo({ x: nextIndex * width, animated: true });
   };
 
+  // Función para ir al slide anterior
   const handlePrev = () => {
     const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
-    changeSlide(prevIndex);
+    setCurrentIndex(prevIndex);
+    scrollViewRef.current.scrollTo({ x: prevIndex * width, animated: true });
+  };
+
+  // Controlar el scroll para actualizar el índice actual
+  const handleScroll = (event) => {
+    const scrollPosition = event.nativeEvent.contentOffset.x;
+    const index = Math.round(scrollPosition / width);
+    setCurrentIndex(index);
   };
 
   return (
     <View style={styles.container}>
-      <Animated.View style={[styles.slide, { transform: [{ translateX: slideAnim }] }]}>
-        <Image source={slides[currentIndex].image} style={styles.image} />
-        <Text style={styles.title}>{slides[currentIndex].title}</Text>
-      </Animated.View>
+      <ScrollView
+        horizontal
+        pagingEnabled
+        ref={scrollViewRef}
+        onScroll={handleScroll} // Controlar el deslizamiento
+        scrollEventThrottle={16}
+        showsHorizontalScrollIndicator={false}
+        style={styles.scrollView}
+      >
+        {slides.map((slide) => (
+          <View
+            key={slide.id}
+            style={[styles.slide, { width: width }]}
+          >
+            <Image source={slide.image} style={styles.image} />
+            <Text style={styles.title}>{slide.title}</Text>
+          </View>
+        ))}
+      </ScrollView>
       <View style={styles.controls}>
         <TouchableOpacity style={styles.controlButton} onPress={handlePrev}>
           <Text style={styles.controlText}>{'<'}</Text>
@@ -82,17 +86,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#f0f0f0',
   },
+  scrollView: {
+    flex: 1,
+    width: width,  // Asegurar que el ScrollView tenga el mismo ancho que la pantalla
+  },
   slide: {
-    width: width,  // Tomar todo el ancho de la pantalla
-    height: width * 0.6,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 0, // Eliminar padding lateral
   },
   image: {
-    width: width * 0.8, // Ajustar el tamaño de la imagen para que no tome todo el ancho
-    height: width * 0.4,
-    resizeMode: 'contain',
+    width: width * 0.9, // Ajustar el tamaño de la imagen para que se vea completa
+    height: height * 0.5, // Ajustar a la mitad de la altura de la pantalla
+    resizeMode: 'contain', // Usar contain para que no se corte la imagen
   },
   title: {
     marginTop: 10,
