@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, FlatList, TouchableOpacity, StyleSheet, Alert, Vibration } from 'react-native';
+import { View, Text, TextInput, Button, FlatList, TouchableOpacity, StyleSheet, Alert, Vibration, KeyboardAvoidingView, ScrollView, Keyboard } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
@@ -21,7 +21,7 @@ export default function PantallaNotificaciones() {
     emergencia: false,
   });
   const [formVisible, setFormVisible] = useState(false);
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
 
   useEffect(() => {
     const cargarContactos = async () => {
@@ -88,7 +88,7 @@ export default function PantallaNotificaciones() {
     <View style={styles.container}>
       <Button
         title="Contactos de Emergencia"
-        onPress={() => navigation.navigate('PantallaNotificacionesDetalle', { contactos })}
+        onPress={() => navigation.navigate('DetalleNotificaciones', { contactos })}
       />
 
       <FlatList
@@ -109,41 +109,51 @@ export default function PantallaNotificaciones() {
       />
 
       {formVisible && (
-        <View style={styles.formContainer}>
-          <TouchableOpacity style={styles.closeButton} onPress={() => setFormVisible(false)}>
-            <Text style={styles.closeButtonText}>✕</Text>
-          </TouchableOpacity>
+        <KeyboardAvoidingView behavior="padding" style={styles.keyboardView}>
+          <ScrollView contentContainerStyle={styles.scrollView}>
+            <View style={styles.formContainer}>
+              <TouchableOpacity style={styles.closeButton} onPress={() => setFormVisible(false)}>
+                <Text style={styles.closeButtonText}>✕</Text>
+              </TouchableOpacity>
 
-          <Text style={styles.formTitle}>Agregar Contacto</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Nombre"
-            value={nuevoContacto.nombre}
-            onChangeText={(text) => setNuevoContacto({ ...nuevoContacto, nombre: text })}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Apellido"
-            value={nuevoContacto.apellido}
-            onChangeText={(text) => setNuevoContacto({ ...nuevoContacto, apellido: text })}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Teléfono"
-            value={nuevoContacto.telefono}
-            keyboardType="numeric"
-            onChangeText={(text) => setNuevoContacto({ ...nuevoContacto, telefono: text })}
-          />
-          <View style={styles.checkboxContainer}>
-            <TouchableOpacity onPress={() => setNuevoContacto({ ...nuevoContacto, emergencia: !nuevoContacto.emergencia })}>
-              <Text>{nuevoContacto.emergencia ? '☑' : '☐'}</Text>
-            </TouchableOpacity>
-            <Text style={styles.checkboxLabel}>¿Es contacto de emergencia?</Text>
-          </View>
-          <TouchableOpacity style={styles.saveButton} onPress={agregarContacto}>
-            <Text style={styles.saveButtonText}>Agregar Contacto</Text>
-          </TouchableOpacity>
-        </View>
+              <Text style={styles.formTitle}>Agregar Contacto</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Nombre"
+                value={nuevoContacto.nombre}
+                onChangeText={(text) => setNuevoContacto({ ...nuevoContacto, nombre: text })}
+                onSubmitEditing={() => Keyboard.dismiss()} // Cierra el teclado al finalizar
+                returnKeyType="done" // Cambia el botón "Enter" por "Done"
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Apellido"
+                value={nuevoContacto.apellido}
+                onChangeText={(text) => setNuevoContacto({ ...nuevoContacto, apellido: text })}
+                onSubmitEditing={() => Keyboard.dismiss()} // Cierra el teclado al finalizar
+                returnKeyType="done" // Cambia el botón "Enter" por "Done"
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Teléfono"
+                value={nuevoContacto.telefono}
+                keyboardType="numeric"
+                onChangeText={(text) => setNuevoContacto({ ...nuevoContacto, telefono: text })}
+                onSubmitEditing={() => Keyboard.dismiss()} // Cierra el teclado al finalizar
+                returnKeyType="done" // Cambia el botón "Enter" por "Done"
+              />
+              <View style={styles.checkboxContainer}>
+                <TouchableOpacity onPress={() => setNuevoContacto({ ...nuevoContacto, emergencia: !nuevoContacto.emergencia })}>
+                  <Text>{nuevoContacto.emergencia ? '☑' : '☐'}</Text>
+                </TouchableOpacity>
+                <Text style={styles.checkboxLabel}>¿Es contacto de emergencia?</Text>
+              </View>
+              <TouchableOpacity style={styles.saveButton} onPress={agregarContacto}>
+                <Text style={styles.saveButtonText}>Agregar Contacto</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
       )}
 
       {!formVisible && (
@@ -158,53 +168,74 @@ export default function PantallaNotificaciones() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#f7f9fc',
     padding: 20,
   },
   contactCard: {
     backgroundColor: '#fff',
     padding: 20,
-    borderRadius: 10,
+    borderRadius: 12,
     marginBottom: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 3,
   },
   contactText: {
     fontSize: 18,
+    fontWeight: '500',
+    color: '#333',
   },
   deleteButtonText: {
     fontSize: 24,
-    color: 'red',
+    color: '#ff4757',
   },
   addButton: {
     position: 'absolute',
     bottom: 20,
     right: 20,
     zIndex: 10,
+    backgroundColor: '#007bff',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 5,
   },
   formContainer: {
     backgroundColor: '#fff',
     padding: 20,
-    borderRadius: 10,
+    borderRadius: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 1,
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 4,
+    marginTop: 20,
   },
   formTitle: {
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: '#007bff',
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    padding: 12,
     marginBottom: 15,
     fontSize: 16,
+    backgroundColor: '#f9f9f9',
   },
   checkboxContainer: {
     flexDirection: 'row',
@@ -214,25 +245,39 @@ const styles = StyleSheet.create({
   checkboxLabel: {
     marginLeft: 10,
     fontSize: 16,
+    color: '#555',
   },
   saveButton: {
-    backgroundColor: '#007bff',
-    paddingVertical: 10,
-    borderRadius: 5,
+    backgroundColor: '#28a745',
+    paddingVertical: 12,
+    borderRadius: 8,
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 3,
   },
   saveButtonText: {
     color: '#fff',
     fontSize: 18,
+    fontWeight: 'bold',
   },
   closeButton: {
     position: 'absolute',
     top: 10,
     right: 10,
     zIndex: 10,
+    backgroundColor: '#ff4757',
+    borderRadius: 20,
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   closeButtonText: {
     fontSize: 24,
+    color: '#fff',
     fontWeight: 'bold',
   },
 });

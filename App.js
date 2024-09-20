@@ -27,7 +27,7 @@ function NotificacionesStackScreen() {
         options={{ headerShown: false }} 
       />
       <NotificacionesStack.Screen 
-        name="PantallaNotificacionesDetalle" 
+        name="DetalleNotificaciones"  // Nombre único actualizado
         component={PantallaNotificacionesDetalle} 
       />
     </NotificacionesStack.Navigator>

@@ -1,29 +1,24 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 
-
 const { width, height } = Dimensions.get('window');
 
 export default function PantallaInicio() {
   const slides = [
     {
       id: 1,
-      image: ('../Imagen/Ida.jpg'),  
+      image: require('../../Imagen/Ida.jpg'),  
       title: 'Pasaje de ida',
     },
     {
       id: 2,
-      image: ('../Imagen/Vuelta.jpg'),  
+      image: require('../../Imagen/Vuelta.jpg'),  // Se usa require para las imágenes locales
       title: 'Pasaje de vuelta',
     }
   ];
 
- 
   const [currentIndex, setCurrentIndex] = useState(0);
-
- 
   const scrollViewRef = useRef(null);
-
 
   const handleNext = () => {
     const nextIndex = (currentIndex + 1) % slides.length;
@@ -31,13 +26,11 @@ export default function PantallaInicio() {
     scrollViewRef.current.scrollTo({ x: nextIndex * width, animated: true });
   };
 
-  
   const handlePrev = () => {
     const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
     setCurrentIndex(prevIndex);
     scrollViewRef.current.scrollTo({ x: prevIndex * width, animated: true });
   };
-
 
   const handleScroll = (event) => {
     const scrollPosition = event.nativeEvent.contentOffset.x;

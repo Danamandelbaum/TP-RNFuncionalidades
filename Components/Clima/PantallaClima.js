@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import * as Location from 'expo-location';
 import axios from 'axios';
 import { mostrarError } from '../Error/ErrorHelper.js'; 
+import { Ionicons } from '@expo/vector-icons';
 
 export default function PantallaClima() {
   const [location, setLocation] = useState(null);
@@ -63,18 +64,22 @@ export default function PantallaClima() {
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
 
+  const iconName = 'cloud-outline';
+
   return (
     <View style={styles.container}>
+      {/* Icono */}
+      <Ionicons name={iconName} size={80} color="#4a90e2" /> 
       <Text style={styles.dateTime}>
         {dateTime.toLocaleDateString()} - {dateTime.toLocaleTimeString()}
       </Text>
       {location ? (
         <>
           <Text style={styles.text}>
-            Ubicación: Latitud {location.latitude}, Longitud {location.longitude}
+            🌍 Ubicación: Latitud {location.latitude}, Longitud {location.longitude}
           </Text>
           <Text style={styles.text}>
-            Temperatura actual: {temperature !== null ? `${temperature}°C` : 'Cargando...'}
+            🌡️ Temperatura actual: {temperature !== null ? `${temperature}°C` : 'Cargando...'}
           </Text>
         </>
       ) : (
@@ -89,17 +94,33 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#e0f7fa',  // Fondo color azul claro
+    padding: 20,
   },
   dateTime: {
-    fontSize: 24,
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#00796b',  // Texto en un tono verde oscuro
     marginBottom: 20,
   },
   text: {
-    fontSize: 18,
+    fontSize: 20,
+    color: '#004d40',  // Color de texto verde más suave
+    marginVertical: 10,
+    textAlign: 'center',
+    paddingHorizontal: 20,
+    backgroundColor: '#ffffff',  // Fondo blanco para el texto
+    borderRadius: 10,  // Bordes redondeados
+    padding: 10,
+    shadowColor: '#000',  // Sombra
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,  // Sombra en Android
   },
   errorText: {
-    color: 'red',
+    color: '#e57373',  // Texto de error en rojo
     fontSize: 18,
+    marginVertical: 10,
   },
 });
