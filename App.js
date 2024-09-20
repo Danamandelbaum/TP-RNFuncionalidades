@@ -115,7 +115,6 @@ function MyTabs() {
       <Tab.Screen name="Inicio" component={InicioStackScreen} />
       <Tab.Screen name="Clima" component={ClimaStackScreen} />
       <Tab.Screen name="Acerca de" component={AboutStackScreen} />
-      <Tab.Screen name="Escaner" component={EscanerStackScreen} />
     </Tab.Navigator>
   );
 }
