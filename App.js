@@ -9,11 +9,14 @@ import PantallaNotificaciones from './Components/Notificaciones/PantallaNotifica
 import PantallaClima from './Components/Clima/PantallaClima';
 import PantallaNotificacionesDetalle from './Components/Notificaciones/PantallaNotificacionesDetalle';
 import GeneradorQR from './Components/About/GeneradorQR';
+import PantallaEscaner from './Components/Integrantes/PantallaEscaner';
+import PantallaResultadoQR from './Components/Integrantes/PantallaResultadoQR';
 
 const NotificacionesStack = createStackNavigator();
 const InicioStack = createStackNavigator();
 const ClimaStack = createStackNavigator();
 const AboutStack = createStackNavigator();
+const EscanerStack = createStackNavigator();
 
 function NotificacionesStackScreen() {
   return (
@@ -67,6 +70,22 @@ function AboutStackScreen() {
   );
 }
 
+function EscanerStackScreen() {
+  return (
+    <EscanerStack.Navigator>
+      <EscanerStack.Screen 
+        name="Escaner" 
+        component={PantallaEscaner} 
+        options={{ headerShown: false }} 
+      />
+      <EscanerStack.Screen 
+        name="ResultadoQR" 
+        component={PantallaResultadoQR} 
+      />
+    </EscanerStack.Navigator>
+  );
+}
+
 const Tab = createBottomTabNavigator();
 
 function MyTabs() {
@@ -82,8 +101,10 @@ function MyTabs() {
             iconName = 'home-outline';
           } else if (route.name === 'Clima') {
             iconName = 'thermometer-outline';
-          } else if (route.name === 'Acerca de' || route.name === 'Generador QR') {
+          } else if (route.name === 'Acerca de') {
             iconName = 'information-circle-outline';
+          } else if (route.name === 'Escaner') {
+            iconName = 'camera-outline';
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -94,6 +115,7 @@ function MyTabs() {
       <Tab.Screen name="Inicio" component={InicioStackScreen} />
       <Tab.Screen name="Clima" component={ClimaStackScreen} />
       <Tab.Screen name="Acerca de" component={AboutStackScreen} />
+      <Tab.Screen name="Escaner" component={EscanerStackScreen} />
     </Tab.Navigator>
   );
 }

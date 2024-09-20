@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import QRCode from 'react-native-qrcode-svg';
+import QRCode from 'react-native-qrcode-svg'; // Asegúrate de tener instalado react-native-qrcode-svg
 
 export default function GeneradorQR() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Generar Código QR</Text>
       <QRCode
-        value="Agustina Potasman, Dana Mandelbaum y Ariana Castro"
+        value="Ariana Castro, Dana Mandelbaum y Agustina Potasman"
         size={200}
         color="black"
         backgroundColor="white"
