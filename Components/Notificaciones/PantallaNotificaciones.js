@@ -13,7 +13,14 @@ const mostrarError = (titulo, mensaje) => {
 };
 
 export default function PantallaNotificaciones() {
-  const [contactos, setContactos] = useState([]);
+  const navigation = useNavigation();
+
+  const contactosPorDefecto = [
+    { id: '1', nombre: 'Juan', apellido: 'Pérez', telefono: '1234567', emergencia: true },
+    { id: '2', nombre: 'María', apellido: 'Gómez', telefono: '7654321', emergencia: false },
+  ];
+
+  const [contactos, setContactos] = useState(contactosPorDefecto);
   const [nuevoContacto, setNuevoContacto] = useState({
     nombre: '',
     apellido: '',
@@ -21,7 +28,6 @@ export default function PantallaNotificaciones() {
     emergencia: false,
   });
   const [formVisible, setFormVisible] = useState(false);
-  const navigation = useNavigation();
 
   useEffect(() => {
     const cargarContactos = async () => {
@@ -245,39 +251,33 @@ const styles = StyleSheet.create({
   checkboxLabel: {
     marginLeft: 10,
     fontSize: 16,
-    color: '#555',
   },
   saveButton: {
     backgroundColor: '#28a745',
-    paddingVertical: 12,
+    padding: 15,
     borderRadius: 8,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 3,
   },
   saveButtonText: {
     color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 16,
   },
   closeButton: {
     position: 'absolute',
     top: 10,
     right: 10,
-    zIndex: 10,
-    backgroundColor: '#ff4757',
-    borderRadius: 20,
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   closeButtonText: {
     fontSize: 24,
-    color: '#fff',
-    fontWeight: 'bold',
+    color: '#ff4757',
+  },
+  keyboardView: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  scrollView: {
+    paddingBottom: 20,
   },
 });
