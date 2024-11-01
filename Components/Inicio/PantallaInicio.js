@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Asegúrate de instalar react-native-vector-icons si no lo tienes
+import { Ionicons } from '@expo/vector-icons'; 
 
 const { width, height } = Dimensions.get('window');
 

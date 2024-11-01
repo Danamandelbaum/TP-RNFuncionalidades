@@ -68,7 +68,6 @@ export default function PantallaClima() {
 
   return (
     <View style={styles.container}>
-      {/* Icono */}
       <Ionicons name={iconName} size={80} color="#4a90e2" /> 
       <Text style={styles.dateTime}>
         {dateTime.toLocaleDateString()} - {dateTime.toLocaleTimeString()}
@@ -94,32 +93,32 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#e0f7fa',  // Fondo color azul claro
+    backgroundColor: '#e0f7fa', 
     padding: 20,
   },
   dateTime: {
     fontSize: 26,
     fontWeight: 'bold',
-    color: '#00796b',  // Texto en un tono verde oscuro
+    color: '#00796b', 
     marginBottom: 20,
   },
   text: {
     fontSize: 20,
-    color: '#004d40',  // Color de texto verde más suave
+    color: '#004d40', 
     marginVertical: 10,
     textAlign: 'center',
     paddingHorizontal: 20,
-    backgroundColor: '#ffffff',  // Fondo blanco para el texto
-    borderRadius: 10,  // Bordes redondeados
+    backgroundColor: '#ffffff',  
+    borderRadius: 10,  
     padding: 10,
-    shadowColor: '#000',  // Sombra
+    shadowColor: '#000',  
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
-    elevation: 5,  // Sombra en Android
+    elevation: 5,  
   },
   errorText: {
-    color: '#e57373',  // Texto de error en rojo
+    color: '#e57373',  
     fontSize: 18,
     marginVertical: 10,
   },

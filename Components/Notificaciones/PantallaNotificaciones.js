@@ -128,16 +128,16 @@ export default function PantallaNotificaciones() {
                 placeholder="Nombre"
                 value={nuevoContacto.nombre}
                 onChangeText={(text) => setNuevoContacto({ ...nuevoContacto, nombre: text })}
-                onSubmitEditing={() => Keyboard.dismiss()} // Cierra el teclado al finalizar
-                returnKeyType="done" // Cambia el botón "Enter" por "Done"
+                onSubmitEditing={() => Keyboard.dismiss()} 
+                returnKeyType="done" 
               />
               <TextInput
                 style={styles.input}
                 placeholder="Apellido"
                 value={nuevoContacto.apellido}
                 onChangeText={(text) => setNuevoContacto({ ...nuevoContacto, apellido: text })}
-                onSubmitEditing={() => Keyboard.dismiss()} // Cierra el teclado al finalizar
-                returnKeyType="done" // Cambia el botón "Enter" por "Done"
+                onSubmitEditing={() => Keyboard.dismiss()} 
+                returnKeyType="done" 
               />
               <TextInput
                 style={styles.input}
@@ -145,8 +145,8 @@ export default function PantallaNotificaciones() {
                 value={nuevoContacto.telefono}
                 keyboardType="numeric"
                 onChangeText={(text) => setNuevoContacto({ ...nuevoContacto, telefono: text })}
-                onSubmitEditing={() => Keyboard.dismiss()} // Cierra el teclado al finalizar
-                returnKeyType="done" // Cambia el botón "Enter" por "Done"
+                onSubmitEditing={() => Keyboard.dismiss()} 
+                returnKeyType="done" 
               />
               <View style={styles.checkboxContainer}>
                 <TouchableOpacity onPress={() => setNuevoContacto({ ...nuevoContacto, emergencia: !nuevoContacto.emergencia })}>
